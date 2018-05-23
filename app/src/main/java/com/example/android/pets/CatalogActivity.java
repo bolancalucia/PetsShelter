@@ -96,11 +96,11 @@ public class CatalogActivity extends AppCompatActivity {
                 int currentGender = cursor.getInt(genderColumnIndex);
                 int currentWeight = cursor.getInt(weightColumnIndex);
                 // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
+                displayView.append("\n" + currentID + " - " +
                         currentName + " - " +
                         currentBreed + " - " +
                         currentGender + " - " +
-                        currentWeight));
+                        currentWeight);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
