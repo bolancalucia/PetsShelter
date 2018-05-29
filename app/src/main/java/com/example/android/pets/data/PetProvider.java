@@ -48,11 +48,11 @@ public class PetProvider extends ContentProvider {
                 break;
             case PET_ID:
                 selection = PetEntry._ID + "=?";
-                selectionArgs = new String [] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
-                default:
-                    throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
         return cursor;
     }
@@ -65,31 +65,31 @@ public class PetProvider extends ContentProvider {
         switch (match) {
             case PETS:
                 return insertPet(uri, values);
-                default:
-                    throw new IllegalArgumentException("Insertion is not supported for " + uri);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
 
     private Uri insertPet(Uri uri, ContentValues values) {
 
         String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
-        if(name == null) {
+        if (name == null) {
             throw new IllegalArgumentException("Pet requires a name");
         }
 
         Integer gender = values.getAsInteger(PetEntry.COLUMN_PET_GENDER);
-        if(gender == null || !PetEntry.isValidGender(gender)) {
+        if (gender == null || !PetEntry.isValidGender(gender)) {
             throw new IllegalArgumentException("Pet requires valid gender");
         }
 
         Integer weight = values.getAsInteger(PetEntry.COLUMN_PET_WEIGHT);
-        if(weight != null && weight < 0) {
+        if (weight != null && weight < 0) {
             throw new IllegalArgumentException("Pet requires valid weight");
         }
 
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         long id = database.insert(PetEntry.TABLE_NAME, null, values);
-        if(id == -1) {
+        if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
@@ -105,14 +105,14 @@ public class PetProvider extends ContentProvider {
                 return updatePet(uri, values, selection, selectionArgs);
             case PET_ID:
                 selection = PetEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updatePet(uri, values, selection, selectionArgs);
-                default:
-                    throw new IllegalArgumentException("Update is not supported for " + uri);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-    private int updatePet(Uri uri, ContentValues values, String selection, String [] selectionArgs) {
+    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         if (values.containsKey(PetEntry.COLUMN_PET_NAME)) {
             String name = values.getAsString(PetEntry.COLUMN_PET_NAME);
@@ -135,7 +135,7 @@ public class PetProvider extends ContentProvider {
             }
         }
 
-        if(values.size() == 0) {
+        if (values.size() == 0) {
             return 0;
         }
 
@@ -154,7 +154,7 @@ public class PetProvider extends ContentProvider {
                 return database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
             case PET_ID:
                 selection = PetEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -172,5 +172,6 @@ public class PetProvider extends ContentProvider {
                 return PetEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
