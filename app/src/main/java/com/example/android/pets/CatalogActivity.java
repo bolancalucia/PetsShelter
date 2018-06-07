@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.pets.data.PetContract.PetEntry;
 import com.example.android.pets.data.PetCursorAdapter;
@@ -67,7 +68,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
         values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
 
-        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+        getContentResolver().insert(PetEntry.CONTENT_URI, values);
+    }
+
+    private void deleteAllPets() {
+       int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
+       if(rowsDeleted == 0) {
+           Toast.makeText(this, getString(R.string.catalog_activity_delete_all_pets_unsuccessful), Toast.LENGTH_SHORT).show();
+       }
+       else {
+           Toast.makeText(this, getString(R.string.catalog_activity_delete_all_pets_successful), Toast.LENGTH_SHORT).show();
+       }
     }
 
     @Override
@@ -83,6 +94,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 insertPet();
                 return true;
             case R.id.action_delete_all_entries:
+                deleteAllPets();
                 return true;
         }
         return super.onOptionsItemSelected(item);
